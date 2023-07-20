@@ -1,0 +1,201 @@
+<div class="w-full h-screen bg-white mx-auto">
+  <div class="w-full h-full flex flex-col">
+    <header
+      class="w-full h-16 border-b border-gray-200 flex items-center px-6 justify-between"
+    >
+      <div class="flex items-center gap-2">
+        <div class="text-sm font-semibold border-r border-gray-400 pr-2">
+          Shop Builder
+        </div>
+        <div class="text-xs text-gray-600">
+          Last Saved Time: {{ time }} {{ date }}
+        </div>
+      </div>
+      <div class="flex items-center">
+        <form [formGroup]="formGroup">
+          <p-dropdown
+            formControlName="selectedCity"
+            [options]="options"
+            optionLabel="name"
+          ></p-dropdown>
+        </form>
+      </div>
+      <div class="flex items-center gap-4 h-full">
+        <button
+          type="button"
+          class="rounded border border-gray-400 text-xs font-bold text-gray-600 h-8 w-16"
+        >
+          Desktop
+        </button>
+        <button
+          type="button"
+          class="rounded border border-gray-400 text-xs font-bold text-gray-600 h-8 w-16"
+        >
+          Mobile
+        </button>
+        <div class="flex items-center bg-gray-100 px-2 rounded">
+          <span class="material-icons-outlined text-lg text-gray-600">
+            undo
+          </span>
+        </div>
+
+        <div class="flex items-center bg-gray-100 px-2 rounded">
+          <span class="material-icons-outlined text-lg text-gray-600">
+            redo
+          </span>
+        </div>
+
+        <button
+          type="button"
+          class="rounded border border-gray-400 text-xs font-bold text-gray-600 h-8 w-16"
+        >
+          Preview
+        </button>
+        <button
+          type="button"
+          class="rounded border bg-blue-500 text-white text-xs font-bold h-8 w-16 border-blue-500"
+        >
+          Save
+        </button>
+      </div>
+    </header>
+    <main class="w-full h-full bg-blue-50 flex">
+      <div class="w-1/6 bg-white flex">
+        <div
+          class="h-full w-1/6 border-r border-gray-300 flex flex-col items-center gap-6 py-6"
+        >
+          <span
+            class="material-icons-outlined text-gray-500 font-extralight cursor-pointer"
+          >
+            other_houses
+          </span>
+          <span
+            class="material-icons-outlined text-gray-500 font-extralight cursor-pointer"
+          >
+            satellite
+          </span>
+          <span
+            class="material-icons-outlined text-gray-500 font-extralight cursor-pointer"
+          >
+            settings
+          </span>
+        </div>
+        <div class="w-full h-full px-6 gap-4 flex flex-col">
+          <input
+            type="text"
+            placeholder="Enter text search"
+            class="border-gray-400 border rounded text-sm py-2"
+          />
+          <p class="text-sm text-gray-600 font-sans">
+            Drag and drop block into the shop design workspace
+          </p>
+          <div class="w-full h-fit">
+            <div class="w-full flex items-center justify-between">
+              <div class="text-sm font-semibold text-gray-700">Images</div>
+              <span
+                (click)="handleExpand('image')"
+                class="material-icons-outlined text-gray-500 cursor-pointer"
+              >
+                expand_more
+              </span>
+            </div>
+            <div *ngIf="isExpandImage" class="w-full flex gap-2 flex-wrap">
+              <div
+                *ngFor="let sample of sampleImages"
+                pDraggable="sample"
+                (onDragStart)="dragStart($event, sample)"
+                (onDragEnd)="dragEnd($event)"
+                class="w-20 h-20 border border-gray-200 rounded bg-gray-100 flex items-center justify-center flex-col"
+              >
+                <span class="material-icons-outlined text-gray-500 text-3xl">
+                  photo
+                </span>
+                <p>{{ sample }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="w-full h-fit">
+            <div class="w-full flex items-center justify-between">
+              <div class="text-sm font-semibold text-gray-700">Texts</div>
+              <span
+                (click)="handleExpand('text')"
+                class="material-icons-outlined text-gray-500 cursor-pointer"
+              >
+                expand_more
+              </span>
+            </div>
+            <div *ngIf="isExpandText" class="w-full flex gap-2 flex-wrap">
+              <div
+                *ngFor="let sampleText of sampleTexts"
+                pDraggable="sampleText"
+                (onDragStart)="dragStart($event, sampleText)"
+                (onDragEnd)="dragEnd($event)"
+                class="w-20 h-20 border border-gray-200 rounded bg-gray-100 flex items-center justify-center flex-col"
+              >
+                <span class="material-icons-outlined text-gray-500 text-3xl">
+                  photo
+                </span>
+                <p>{{ sampleText }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Workspace -->
+      <div class="w-4/6 p-6">
+        <div
+          pDroppable="sample"
+          (onDrop)="drop($event)"
+          class="bg-white w-full h-full flex flex-col p-6"
+        >
+          <div class="w-full h-52 flex items-center justify-center">
+            <div
+              *ngIf="droped === 'sample1'"
+              class="w-full h-full bg-blue-200 flex items-center justify-center relative"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1558429121-8cebc52d40a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1654&q=80"
+                alt="sample 1"
+                class="w-full h-full object-fill"
+              />
+              <div
+                pDroppable="sampleText"
+                (onDrop)="drop($event)"
+                class="absolute"
+              ></div>
+            </div>
+            <div
+              *ngIf="droped === 'sample2'"
+              class="w-full h-full bg-blue-200 flex items-center justify-center"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1602826347632-fc49a8675be6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8MjElM0E5fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60"
+                alt="sample 1"
+                class="w-full h-full object-fill"
+              />
+            </div>
+            <div *ngIf="droped === 'sample3'" class="w-full h-full">
+              <p-galleria
+                [value]="images"
+                [showIndicators]="false"
+                [showThumbnails]="false"
+                [autoPlay]="true"
+                [transitionInterval]="3000"
+                [circular]="true"
+                containerClass="h-full"
+                ><ng-template pTemplate="item" let-item>
+                  <img
+                    [src]="item.itemImageSrc"
+                    class="w-full h-60 object-fill"
+                    alt="image"
+                  />
+                </ng-template>
+              </p-galleria>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-1/6 bg-white"></div>
+    </main>
+  </div>
+</div>
